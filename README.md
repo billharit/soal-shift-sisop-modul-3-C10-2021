@@ -636,7 +636,7 @@ void *mult(void* arg)
 }
 ```
 
-
+Shared memory :
 
 ```
     key_t key = 1234;
@@ -647,6 +647,8 @@ void *mult(void* arg)
 
     pthread_t thr[T];
 ```
+
+Menghitung perkalian matriks menggunakan thread :
 
 ```
 count = 0;
@@ -669,6 +671,8 @@ count = 0;
     }
 ```
 
+Hasil perkalian matriks tersebut akan di print :
+
 ```
     int a = 0;
     printf("Hasil perkalian matriks:\n");
@@ -688,6 +692,8 @@ count = 0;
 
 b. Membuat program dengan menggunakan matriks output dari program sebelumnya (program soal2a.c). Kemudian matriks tersebut akan dilakukan perhitungan dengan matrix baru. Perhitungannya adalah setiap cel yang berasal dari matriks A menjadi angka untuk faktorial, lalu cel dari matriks B menjadi batas maksimal faktorialnya matri(dari paling besar ke paling kecil)
 
+Fungsi faktorial :
+
 ```
 unsigned long long factorial(unsigned long long n)
 {
@@ -697,6 +703,8 @@ unsigned long long factorial(unsigned long long n)
     return n*factorial(n-1);
 }
 ```
+
+Fungsi perhitungan faktorial per cell :
 
 ```
 void *fact(void* arg)
@@ -720,12 +728,16 @@ void *fact(void* arg)
 }
 ```
 
+Shared memory :
+
 ```
     key_t key = 1234;
     int *value;
     int shmid = shmget(key, sizeof(int)*T, IPC_CREAT | 0666);
     value = (int *)shmat(shmid, NULL, 0);
 ```
+
+Meng-copy value matriks yang didapatkan dari hasil perkalian nomor 2a :
 
 ```
     printf("matriks: \n");
@@ -742,6 +754,8 @@ void *fact(void* arg)
         printf("\n");
     }
 ```
+
+Menghitung faktorial setiap cell menggunakan thread :
 
 ```
     int count = 0;
@@ -764,6 +778,8 @@ void *fact(void* arg)
         pthread_join(tid[i], NULL);
     }
 ```
+
+Hasil matriks akan di print :
 
 ```
     printf("Hasil matriks: \n");
