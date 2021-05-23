@@ -11,17 +11,22 @@
 #define Z 6
 #define T X*Z
 
-int A[X][Y] = {
-        {1, 1, 1},
-        {1, 1, 1},
-        {1, 1, 1},
-        {1, 1, 1}
-    },
-    B[Y][Z] = {
-        {1, 1, 1, 1, 1, 1},
-        {1, 1, 1, 1, 1, 1},
-        {1, 1, 1, 1, 1, 1}
-    },
+int A[X][Y] 
+    
+        // = {
+// 4, 1, 4,
+// 2, 1, 3,
+// 4, 2, 2,
+// 1, 1, 4
+    // }
+    ,
+    B[Y][Z] 
+//         = {
+// 2, 1, 3, 2, 0, 3,
+// 1, 4, 4, 0, 0, 2,
+// 1, 1, 0, 1, 2, 1
+//     }
+    ,
     C[X][Z];
 
 struct v 
@@ -39,11 +44,15 @@ void *mult(void* arg)
     {
         C[i][j] += A[i][k] * B[k][j];
     }
-    pthread_exit(0);
+
+    int *p = (int *) malloc(sizeof(int));
+    *p = C[i][j];
+
+    pthread_exit(p);
 }
 
 
-int main(int argc, char **argv){
+int main(){
 
     int i, j;
     int count = 0;
@@ -56,6 +65,25 @@ int main(int argc, char **argv){
 
     pthread_t thr[T];
 
+    printf("Masukkan matriks A :\n");
+    for(i = 0; i < X; i++)
+    {
+        for(j = 0; j < Y; j++)
+        {
+            scanf("%d", &A[i][j]);
+        }
+    }
+
+    printf("Masukkan matriks B :\n");
+    for(i = 0; i < Y; i++)
+    {
+        for(j = 0; j < Z; j++)
+        {
+            scanf("%d", &B[i][j]);
+        }
+    }
+
+    count = 0;
     for(i = 0; i < X; i++)
     {
         for(j = 0; j < Z; j++)
@@ -64,7 +92,7 @@ int main(int argc, char **argv){
             data->i = i;
             data->j = j;
 
-            pthread_create(&thr[count], NULL, mult, data);
+            pthread_create(&thr[count], NULL, &mult, (void *)data);
             count++;
         }
     }
@@ -74,18 +102,20 @@ int main(int argc, char **argv){
         pthread_join(thr[i], NULL);
     }
 
+    int a = 0;
     printf("Hasil perkalian matriks:\n");
     for(i = 0; i < X; i++)
     {
         for(j = 0; j < Z; j++)
         {
-            value[i*Z + j] = C[i][j];
-            printf("%d\t", value[i*Z +j]);
+            value[a] = C[i][j];
+            printf("%d\t", value[a]);
+            a++;
         }
         printf("\n");
     }
 
-
     shmdt(value);
-    shmctl(shmid, IPC_RMID, NULL);
+    // shmctl(shmid, IPC_RMID, NULL);
+    // sleep(50);
 }
