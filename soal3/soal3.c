@@ -31,7 +31,7 @@ int is_regular_file(const char *path)
 }
 
 void pindahFile(char *argv, char *cwd){
-
+  
   char stringfile[1000];
   strcpy(stringfile, argv);
   int isFile = is_regular_file(stringfile);
@@ -67,9 +67,9 @@ void pindahFile(char *argv, char *cwd){
 
     size_t len = 0 ;
     // Mindahin
-    char fileawal[1000] ;
+    char fileawal[1000] ; 
     strcpy(fileawal, argv);
-    char filepindah[1000] ;
+    char filepindah[1000] ; 
     strcpy(filepindah, cwd);
     strcat(filepindah, "/");
     strcat(filepindah, TipeFolderLCase+1);
@@ -99,7 +99,7 @@ void commandf(int argc, char* argv[], arg_struct args)
             strcpy(args.asal, argv[i]);
             pthread_create(&tid[index], NULL, pindahinf, (void *)&args);
             sleep(1);
-            index++;
+            index++;  
         }
         for (int i = 0; i < index; i++) {
             pthread_join(tid[i], NULL);
@@ -124,26 +124,69 @@ void commandstar(char *asal,int argc, char* argv[],arg_struct args)
                 char namafile[1000];
                 sprintf(namafile, "%s/%s", asal, entry->d_name);
                 printf("\n");
-
+               
                 strcpy(namafilecomplete, asal);
                 strcpy(namafilecomplete, namafile);
-
+        
                 strcpy(args.asal, namafilecomplete);
                 // strcpy (args.asal=argv[i]) ;
                 // printf("namafilecomplete = %s\n", namafilecomplete);
                 // printf("namaprogram = %s\n", namaprogram);
-
+                
                 if(strcmp(namafilecomplete, namaprogram) != 0 && strcmp(namafilecomplete, namacompiled) != 0)
                 {
                      pthread_create(&tid[index], NULL, pindahinf, (void *)&args);
                     // printf("%s\n", namafilecomplete);
                     sleep(1);
-                     index++;
+                     index++;    
                 }
             }
         }
 }
 
+void commanddelta(char *asal,int argc, char* argv[],arg_struct args)
+{
+    printf("%s" , asal);
+    char asalD[100];
+    strcpy(asalD, argv[2]);
+
+    DIR *dirp;
+        struct dirent *entry;
+        dirp = opendir(argv[2]);
+        char namafilecomplete[1000];
+        char namaprogram[] = "/home/bill/Modul3/soal3.c";
+        char namacompiled[] = "/home/bill/Modul3/soal3";
+
+        int index=0;
+        while((entry = readdir(dirp)) != NULL)
+        {
+            if(entry->d_type == DT_REG)
+            {
+                char namafile[1000];
+                sprintf(namafile, "%s/%s", argv[2], entry->d_name);
+                printf("\n");
+               
+                strcpy(namafilecomplete, argv[2]);
+                strcpy(namafilecomplete, namafile);
+        
+                strcpy(args.asal, namafilecomplete);
+                printf("Asal = %s\n", asal);
+                printf("ARGS ASAL = %s \n", args.asal);
+                printf("ARGV2 = %s \n", argv[2]);
+                // strcpy (args.asal=argv[i]) ;
+                printf("namafilecomplete = %s\n", namafilecomplete);
+                printf("namaprogram = %s\n", namaprogram);
+                
+                if(strcmp(namafilecomplete, namaprogram) != 0 && strcmp(namafilecomplete, namacompiled) != 0)
+                {
+                     pthread_create(&tid[index], NULL, pindahinf, (void *)&args);
+                    // printf("%s\n", namafilecomplete);
+                    // sleep(1);
+                     index++;    
+                }
+            }
+        }
+}
 int main(int argc, char* argv[])
 {
 
@@ -158,11 +201,12 @@ int main(int argc, char* argv[])
      else if(strcmp(argv[1],"-d")==0)
      {
         //  printf("D hehehehe");
+        commanddelta(args.cwd, argc, argv, args);
      }
      else if(strcmp(argv[1],"*")==0)
      {
         // printf("* hehehehe\n");
         commandstar(args.cwd, argc, argv, args);
      }
-
+    
 }
