@@ -614,7 +614,9 @@ Pengerjaan pada waktu pekan ETS, sehingga pembagian waktu menjadi tantangan ters
 ### Soal 2
 > **[soal 2](https://github.com/billharit/soal-shift-sisop-modul-3-C10-2021/tree/main/soal2)**
 
-a. 
+a. Membuat program perkalian matrix (4x3 dengan 3x6) dan menampilkan hasilnya. Matriks nantinya akan berisi angka 1-20 (tidak perlu dibuat filter angka).
+
+Fungsi perkalian matriks :
 
 ```
 void *mult(void* arg)
@@ -633,6 +635,8 @@ void *mult(void* arg)
     pthread_exit(p);
 }
 ```
+
+
 
 ```
     key_t key = 1234;
@@ -682,7 +686,7 @@ count = 0;
     shmdt(value);
 ```
 
-b. 
+b. Membuat program dengan menggunakan matriks output dari program sebelumnya (program soal2a.c). Kemudian matriks tersebut akan dilakukan perhitungan dengan matrix baru. Perhitungannya adalah setiap cel yang berasal dari matriks A menjadi angka untuk faktorial, lalu cel dari matriks B menjadi batas maksimal faktorialnya matri(dari paling besar ke paling kecil)
 
 ```
 unsigned long long factorial(unsigned long long n)
@@ -776,7 +780,9 @@ void *fact(void* arg)
     shmctl(shmid, IPC_RMID, NULL);
 ```
 
-c.
+c. Mengecek 5 proses teratas apa saja yang memakan resource komputernya dengan command “ps aux | sort -nrk 3,3 | head -5”
+
+exec1 untuk menjalankan command ps :
 
 ```
 void exec1()
@@ -794,6 +800,8 @@ void exec1()
     _exit(1);
 }
 ```
+
+exec2 untuk menjalankan command sort :
 
 ```
 void exec2()
@@ -814,6 +822,8 @@ void exec2()
 }
 ```
 
+exec3 untuk menjalankan command head :
+
 ```
 void exec3()
 {
@@ -830,6 +840,8 @@ void exec3()
     _exit(1);
 }
 ```
+
+Pembuatan pipe :
 
 ```
     pipe(fd1);
@@ -850,6 +862,8 @@ void exec3()
         exit(EXIT_FAILURE);
     }
 ```
+
+Pemanggilan fungsi exec menggunakan fork :
 
 ```
     pid = fork();
