@@ -46,8 +46,7 @@ int main(int argc , char *argv[])
         //first time receive message from server
         // parsing pesan server
         memset(server_reply, 0, sizeof(server_reply));
-	    read(sock, server_reply, 1024);
-        printf("SERVER NGIRIM = %s\n" , server_reply);
+	read(sock, server_reply, 1024);
         if (strcmp(server_reply, "menu") == 0) {
             printf("Welcome, please select a command :\n1.Register\n2.Login\n");
             printf("Menu chosen:\n");
