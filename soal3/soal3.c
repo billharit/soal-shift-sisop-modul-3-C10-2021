@@ -98,12 +98,12 @@ void commandf(int argc, char* argv[], arg_struct args)
         {
             strcpy(args.asal, argv[i]);
             pthread_create(&tid[index], NULL, pindahinf, (void *)&args);
-            sleep(1);
+           pthread_join(tid[index], NULL);
             index++;  
         }
-        for (int i = 0; i < index; i++) {
-            pthread_join(tid[i], NULL);
-        }
+        // for (int i = 0; i < index; i++) {
+        //     pthread_join(tid[i], NULL);
+        // }
 }
 
 void commandstar(char *asal,int argc, char* argv[],arg_struct args)
@@ -136,8 +136,9 @@ void commandstar(char *asal,int argc, char* argv[],arg_struct args)
                 if(strcmp(namafilecomplete, namaprogram) != 0 && strcmp(namafilecomplete, namacompiled) != 0)
                 {
                      pthread_create(&tid[index], NULL, pindahinf, (void *)&args);
+                      pthread_join(tid[index],NULL);
                     // printf("%s\n", namafilecomplete);
-                    sleep(1);
+                    // sleep(1);
                      index++;    
                 }
             }
@@ -180,6 +181,7 @@ void commanddelta(char *asal,int argc, char* argv[],arg_struct args)
                 if(strcmp(namafilecomplete, namaprogram) != 0 && strcmp(namafilecomplete, namacompiled) != 0)
                 {
                      pthread_create(&tid[index], NULL, pindahinf, (void *)&args);
+                     pthread_join(tid[index],NULL);
                     // printf("%s\n", namafilecomplete);
                     // sleep(1);
                      index++;    
