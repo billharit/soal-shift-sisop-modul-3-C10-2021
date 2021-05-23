@@ -614,6 +614,286 @@ Pengerjaan pada waktu pekan ETS, sehingga pembagian waktu menjadi tantangan ters
 ### Soal 2
 > **[soal 2](https://github.com/billharit/soal-shift-sisop-modul-3-C10-2021/tree/main/soal2)**
 
+a. 
+
+```
+void *mult(void* arg)
+{
+    int i = ((struct v*)arg)->i,
+        j = ((struct v*)arg)->j;
+
+    for(int k=0; k<Y; k++)
+    {
+        C[i][j] += A[i][k] * B[k][j];
+    }
+
+    int *p = (int *) malloc(sizeof(int));
+    *p = C[i][j];
+
+    pthread_exit(p);
+}
+```
+
+```
+    key_t key = 1234;
+    int *value;
+
+    int shmid = shmget(key, sizeof(int)*T, IPC_CREAT | 0666);
+    value = (int *)shmat(shmid, NULL, 0);
+
+    pthread_t thr[T];
+```
+
+```
+count = 0;
+    for(i = 0; i < X; i++)
+    {
+        for(j = 0; j < Z; j++)
+        {
+            struct v *data = (struct v *) malloc(sizeof(struct v));
+            data->i = i;
+            data->j = j;
+
+            pthread_create(&thr[count], NULL, &mult, (void *)data);
+            count++;
+        }
+    }
+
+    for(i = 0; i < T; i++)
+    {
+        pthread_join(thr[i], NULL);
+    }
+```
+
+```
+    int a = 0;
+    printf("Hasil perkalian matriks:\n");
+    for(i = 0; i < X; i++)
+    {
+        for(j = 0; j < Z; j++)
+        {
+            value[a] = C[i][j];
+            printf("%d\t", value[a]);
+            a++;
+        }
+        printf("\n");
+    }
+
+    shmdt(value);
+```
+
+b. 
+
+```
+unsigned long long factorial(unsigned long long n)
+{
+    if(n == 0)
+        return 1;
+    
+    return n*factorial(n-1);
+}
+```
+
+```
+void *fact(void* arg)
+{
+    int i = ((struct v*)arg)->i,
+        j = ((struct v*)arg)->j;
+    
+    int a = matrix[i][j],
+        b = new[i][j];
+
+    if(a == 0 || b == 0)
+        hasil[i][j] = 0;
+    else if(a >= b)
+    {
+        hasil[i][j] = factorial(a)/factorial(a-b);
+    }
+    else if(a < b)
+        hasil[i][j] = factorial(a);
+    
+    pthread_exit(0);
+}
+```
+
+```
+    key_t key = 1234;
+    int *value;
+    int shmid = shmget(key, sizeof(int)*T, IPC_CREAT | 0666);
+    value = (int *)shmat(shmid, NULL, 0);
+```
+
+```
+    printf("matriks: \n");
+
+    int a = 0;
+    for(i=0; i<M; i++)
+    {
+        for(j=0; j<N; j++)
+        {
+            printf("%d\t", value[a]);
+            matrix[i][j] = value[a];
+            a++;
+        }
+        printf("\n");
+    }
+```
+
+```
+    int count = 0;
+    //hasil factorial
+    for(i=0; i<M; i++)
+    {
+        for(j=0; j<N; j++)
+        {
+            struct v *data = (struct v*)malloc(sizeof(struct v));
+            data->i = i;
+            data->j = j;
+
+            pthread_create(&tid[count], NULL, &fact, (void *)data);
+            count++;
+        }
+    }
+
+    for(i=0; i<T; i++)
+    {
+        pthread_join(tid[i], NULL);
+    }
+```
+
+```
+    printf("Hasil matriks: \n");
+    for(i=0; i<M; i++)
+    {
+        for(j=0; j<N; j++)
+        {
+            printf("%llu\t", hasil[i][j]);
+        }
+        printf("\n");
+    }
+
+    shmdt(value);
+    shmctl(shmid, IPC_RMID, NULL);
+```
+
+c.
+
+```
+void exec1()
+{
+    dup2(fd1[1], 1);
+    closepipe1();
+
+    char *argv1[] = {"ps", "aux", NULL};
+    
+    execv("/bin/ps", argv1);
+    
+    // execlp("/bin/ps", "ps", "aux", NULL);
+    
+    perror("ps aux failed");
+    _exit(1);
+}
+```
+
+```
+void exec2()
+{
+    dup2(fd1[0], 0);
+    dup2(fd2[1], 1);
+
+    closepipe1();
+    closepipe2();
+
+    char *argv2[] = {"sort", "-nrk", "3,3", NULL};
+    execv("/bin/sort", argv2);
+
+    // execlp("usr/bin/sort", "sort", "-nrk", "3,3", NULL);
+
+    perror("sort failed");
+    _exit(1);
+}
+```
+
+```
+void exec3()
+{
+    dup2(fd2[0], 0);
+
+    closepipe2();
+
+    char *argv3[] = {"head", "-5", NULL};
+    execv("/bin/head", argv3);
+    
+    // execlp("usr/bin/head", "head", "-5", NULL);
+    
+    perror("head failed");
+    _exit(1);
+}
+```
+
+```
+    pipe(fd1);
+    pipe(fd2);
+
+    pid_t pid, pid1, pid2;
+    
+
+    if(pipe(fd1) == -1)
+    {
+        perror("Pipe 1 Creation is Failed\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if(pipe(fd2) == -1)
+    {
+        perror("Pipe 2 Creation is Failed\n");
+        exit(EXIT_FAILURE);
+    }
+```
+
+```
+    pid = fork();
+
+    if(pid < 0 )
+    {
+        fprintf(stderr, "fork failed");
+        exit(EXIT_FAILURE);
+    }
+    else if(pid == 0)
+    {
+        exec1();
+    }
+```
+
+```
+    pid1 = fork();
+
+    if(pid1 < 0 )
+    {
+        fprintf(stderr, "fork failed");
+        return 1;
+    }
+    else if(pid1 == 0)
+    {
+        exec2();
+    }
+
+    closepipe1();
+```
+
+```
+    pid2 = fork();
+    if(pid2 < 0)
+    {
+        fprintf(stderr, "fork failed");
+        return 1;
+    }
+    else if(pid2 == 0)
+    {
+        exec3();
+    }
+```
+
 
 
 ### Soal 3
