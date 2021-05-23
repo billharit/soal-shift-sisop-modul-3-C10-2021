@@ -690,6 +690,11 @@ Hasil perkalian matriks tersebut akan di print :
     shmdt(value);
 ```
 
+**Gambar :**
+
+![2a](https://github.com/billharit/soal-shift-sisop-modul-3-C10-2021/blob/main/soal2/2a.jpg)
+
+
 b. Membuat program dengan menggunakan matriks output dari program sebelumnya (program soal2a.c). Kemudian matriks tersebut akan dilakukan perhitungan dengan matrix baru. Perhitungannya adalah setiap cel yang berasal dari matriks A menjadi angka untuk faktorial, lalu cel dari matriks B menjadi batas maksimal faktorialnya matri(dari paling besar ke paling kecil)
 
 Fungsi faktorial :
@@ -795,6 +800,12 @@ Hasil matriks akan di print :
     shmdt(value);
     shmctl(shmid, IPC_RMID, NULL);
 ```
+
+
+**Gambar :**
+
+![2b](https://github.com/billharit/soal-shift-sisop-modul-3-C10-2021/blob/main/soal2/2b.jpg)
+
 
 c. Mengecek 5 proses teratas apa saja yang memakan resource komputernya dengan command “ps aux | sort -nrk 3,3 | head -5”
 
@@ -923,6 +934,11 @@ Pemanggilan fungsi exec menggunakan fork :
         exec3();
     }
 ```
+
+
+**Gambar :**
+
+![2c](https://github.com/billharit/soal-shift-sisop-modul-3-C10-2021/blob/main/soal2/2c.jpg)
 
 
 
